@@ -12,8 +12,10 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 
 const routes : Routes = [
   {path : 'admin/users', component : UsersComponent},
-  {path: 'admin/rooms', component : RoomsComponent},
-  {path: '', component : CalendarComponent}
+  {path : 'admin/rooms', component : RoomsComponent},
+  {path : '', component : CalendarComponent},
+  {path : '404', component : PageNotFoundComponent},
+  {path : '**', redirectTo : '/404'}
 ];
 
 @NgModule({
