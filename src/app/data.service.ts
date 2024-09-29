@@ -29,7 +29,7 @@ export class DataService {
     const room2 = new Room();
     room2.id = 2;
     room2.name = 'Second Room';
-    room2.location = 'Thoird Floor';
+    room2.location = 'Third Floor';
 
     const capacity3 = new LayoutCapacity();
     capacity3.layout = Layout.THEATER;
