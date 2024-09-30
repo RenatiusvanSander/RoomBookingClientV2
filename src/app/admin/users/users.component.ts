@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../model/user';
 import { DataService } from '../../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Room } from '../../model/room';
 
 @Component({
   selector: 'app-users',
@@ -20,7 +21,12 @@ export class UsersComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.users = this.dataService.users;
+    this.dataService.getUsers().subscribe(
+      next => {
+        this.users = next ?? new Array<User>();
+      }
+    );
+
     this.route.queryParams.subscribe(
       (params) => {
         const id = params['id'];
