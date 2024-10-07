@@ -69,4 +69,25 @@ export class DataService {
     this.users.push(user2);
     this.users.push(user3);
   }
+
+  updateUser(user: User) : Observable<User> {
+    const originalUser = this.users.find( u => u.id === user.id) ?? new User();
+    originalUser.name = user.name;
+
+    return of(originalUser);
+  }
+
+  addUser(newUser: User, password: string) : Observable<User> {
+    let id = 0;
+    for (const user of this.users) {
+      if(user.id > id) {
+        id = user.id;
+      }
+    }
+
+    newUser.id = id + 1;
+    this.users.push(newUser);
+    
+    return of(newUser);
+  }
 }
