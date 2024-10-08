@@ -19,11 +19,14 @@ export class UserEditComponent implements OnInit {
 
   password: string;
 
+  password2: string;
+
   constructor(private dataService: DataService, private router: Router) {
     this.user = new User();
     this.message = '';
     this.formUser = new User();
     this.password = '';
+    this.password2 = '';
   }
 
   ngOnInit(): void {
