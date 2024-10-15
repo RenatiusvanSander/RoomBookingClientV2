@@ -24,10 +24,16 @@ export class RoomEditComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.roomForm.patchValue({
+      roomName:  this.room.name,
+      location: this.room.location
+    });
   }
 
   onSubmit() {
-    console.log(this.roomForm);
+    this.room.name = this.roomForm.controls['roomName'].value ?? '';
+    this.room.location = this.roomForm.value['location'] ?? '';
+    console.log(this.room);
   }
 
 }
