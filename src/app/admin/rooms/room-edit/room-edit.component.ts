@@ -49,6 +49,7 @@ export class RoomEditComponent implements OnInit{
       layoutCapacity.capacity = this.roomForm.controls[`layout${layout}`].value;
       this.room.capacities.push(layoutCapacity);
     }
+    
     console.log(this.room);
   }
 
