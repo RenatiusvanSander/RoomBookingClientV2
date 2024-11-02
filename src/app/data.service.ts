@@ -32,7 +32,7 @@ export class DataService {
 
     const capacity2 = new LayoutCapacity();
     capacity2.layout = Layout.USHAPE;
-    capacity2.capacity = 50;
+    capacity2.capacity = 20;
 
     room1.capacities.push(capacity1);
     room1.capacities.push(capacity2);

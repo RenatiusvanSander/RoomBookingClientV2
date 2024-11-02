@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Layout, LayoutCapacity, Room } from '../../../model/room';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-room-edit',
@@ -16,25 +16,24 @@ export class RoomEditComponent implements OnInit{
   layoutEnum = Layout;
   layoutTypes: Array<string> = Object.keys(Layout).filter(key => isNaN(+key));
 
-  roomForm = new FormGroup<{[key: string]:FormControl|FormArray}>(
-    {
-      roomName : new FormControl('roomName'),
-      location: new FormControl('location'),
-    }
-  );
+  roomForm: FormGroup;
   
-  constructor() {
+  constructor(private formBuilder: FormBuilder) {
     this.room = new Room();
+    this.roomForm = this.formBuilder.group({});
   }
 
   ngOnInit(): void {
-    this.roomForm.patchValue({
-      roomName:  this.room.name,
-      location: this.room.location
-    });
+    this.roomForm = this.formBuilder.group(
+      {
+       roomName : [this.room.name, Validators.required],
+       location : [this.room.location, [Validators.required, Validators.minLength(2)]] 
+      });
 
     for (const layout of this.layouts) {
-      this.roomForm.addControl(`layout${layout}`, new FormControl(`layout${layout}`));
+      const layoutCapacity = this.room.capacities.find( lc => lc.layout === this.getLayoutByKey(layout));
+      const initialCapacity = layoutCapacity == null ? 0 : layoutCapacity.capacity;
+      this.roomForm.addControl(`layout${layout}`, this.formBuilder.control(initialCapacity));
     }
   }
 
@@ -49,8 +48,9 @@ export class RoomEditComponent implements OnInit{
       layoutCapacity.capacity = this.roomForm.controls[`layout${layout}`].value;
       this.room.capacities.push(layoutCapacity);
     }
-    
+
     console.log(this.room);
+    console.log(this.roomForm);
   }
 
   getLayoutByKey(layoutKey: string): Layout {
