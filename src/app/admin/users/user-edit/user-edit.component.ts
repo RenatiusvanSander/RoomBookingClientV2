@@ -1,14 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../../../model/user';
 import { DataService } from '../../../data.service';
 import { Router } from '@angular/router';
+import { FormResetService } from '../../../form-reset.service';
+import { Subscribable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.css'
 })
-export class UserEditComponent implements OnInit {
+export class UserEditComponent implements OnInit, OnDestroy {
 
   @Input()
   user: User;
@@ -25,18 +27,35 @@ export class UserEditComponent implements OnInit {
   passwordsAreValid = false;
   passwordsMatch = false;
 
-  constructor(private dataService: DataService, private router: Router) {
+  userResetSubscription: Subscription;
+
+  constructor(private dataService: DataService, private router: Router, private formResetService: FormResetService) {
     this.user = new User();
     this.message = '';
     this.formUser = new User();
     this.password = '';
     this.password2 = '';
+    this.userResetSubscription = new Subscription();
   }
 
   ngOnInit(): void {
+    this.initializeForm();
+    this.userResetSubscription = this.formResetService.resetUserFormEvent.subscribe(
+      user => {
+        this.user = user;
+        this.initializeForm();
+      }
+    );
+  }
+
+  private initializeForm() {
     this.formUser = Object.assign({}, this.user);
     this.checkIfNameIsValid();
     this.checkIfPasswordsAreValid();
+  }
+
+  ngOnDestroy(): void {
+    this.userResetSubscription.unsubscribe();
   }
 
   onSubmit() {
