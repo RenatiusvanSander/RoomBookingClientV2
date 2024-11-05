@@ -26,6 +26,22 @@ export class DataService {
     return of(this.bookings);
   }
 
+  getBooking(id: number) : Observable<Booking> {
+    return of(this.bookings.find(b => b.id === id) ?? new Booking());
+  }
+
+  saveBooking(booking: Booking) {
+    const existingBooking = this.bookings.find(b => b.id === booking.id) ?? new Booking();
+    existingBooking.date = booking.date;
+    existingBooking.startTime = booking.startTime;
+    existingBooking.endTime = booking.endTime;
+    existingBooking.title = booking.title;
+    existingBooking.layout = booking.layout;
+    existingBooking.room = booking.room;
+    existingBooking.user = booking.user;
+    existingBooking.participants = booking.participants;
+  }
+
   constructor() {
     this.bookings = new Array<Booking>;
     this.rooms = new Array<Room>;

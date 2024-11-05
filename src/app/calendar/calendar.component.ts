@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { DataService } from '../data.service';
 import { Booking } from '../model/Booking';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-calendar',
@@ -12,7 +13,7 @@ export class CalendarComponent implements OnInit {
 
   bookings: Array<Booking>;
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService, private router: Router) {
     this.bookings = new Array<Booking>();
   }
 
@@ -20,6 +21,10 @@ export class CalendarComponent implements OnInit {
     this.dataService.getBookings().subscribe(
       next => this.bookings = next
     );
+  }
+
+  editBooking(id: number) {
+    this.router.navigate(['editBooking'], {queryParams: {id}});
   }
 
 }
