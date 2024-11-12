@@ -30,7 +30,7 @@ export class DataService {
     return of(this.bookings.find(b => b.id === id) ?? new Booking());
   }
 
-  saveBooking(booking: Booking) {
+  saveBooking(booking: Booking) : Observable<Booking> {
     const existingBooking = this.bookings.find(b => b.id === booking.id) ?? new Booking();
     existingBooking.date = booking.date;
     existingBooking.startTime = booking.startTime;
@@ -40,6 +40,25 @@ export class DataService {
     existingBooking.room = booking.room;
     existingBooking.user = booking.user;
     existingBooking.participants = booking.participants;
+
+    return of(existingBooking);
+  }
+
+  addBooking(newBooking: Booking) : Observable<Booking> {
+    let id = 0;
+    for (const booking of this.bookings) {
+      if(booking.id > id) id = booking.id;
+    }
+    newBooking.id = id +1;
+    this.bookings.push(newBooking);
+    return of(newBooking);
+  }
+
+  deleteBooking(id: number) : Observable<any> {
+    const booking = this.bookings.find(b => b.id === id) ?? new Booking();
+    this.bookings.splice(this.bookings.indexOf(booking), 1);
+
+    return of(null);
   }
 
   constructor() {

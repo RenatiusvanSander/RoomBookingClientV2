@@ -3,7 +3,7 @@ import { Booking } from '../../model/Booking';
 import { Layout, Room } from '../../model/room';
 import { DataService } from '../../data.service';
 import { User } from '../../model/user';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-booking',
@@ -18,7 +18,7 @@ export class EditBookingComponent implements OnInit{
   layoutEnum = Layout;
   users: Array<User>;
 
-  constructor(private dataService: DataService, private route: ActivatedRoute) {
+  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) {
     this.booking = new Booking();
     this.rooms = new Array<Room>();
     this.users = new Array<User>();
@@ -34,10 +34,28 @@ export class EditBookingComponent implements OnInit{
     );
 
     const id = this.route.snapshot.queryParams['id'];
-    this.dataService.getBooking(+id).subscribe(next => this.booking = next);
+    if(id) {
+      this.dataService.getBooking(+id).subscribe(
+        next => this.booking = next
+      );
+    } else {
+      this.booking = new Booking();
+    }
   }
 
   getLayoutByKey(layoutKey: string): Layout {
     return this.layoutEnum[layoutKey as keyof typeof Layout];
+  }
+
+  onSubmit() {
+    if (this.booking.id != null) {
+      this.dataService.saveBooking(this.booking).subscribe(
+        next => this.router.navigate([''])
+      );
+    } else {
+      this.dataService.addBooking(this.booking).subscribe(
+        next => this.router.navigate([''])
+      )
+    }
   }
 }

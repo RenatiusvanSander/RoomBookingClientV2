@@ -27,4 +27,12 @@ export class CalendarComponent implements OnInit {
     this.router.navigate(['editBooking'], {queryParams: {id}});
   }
 
+  addBooking() {
+    this.router.navigate(['addBooking']);
+  }
+
+  deleteBooking(id: number) {
+    this.dataService.deleteBooking(id).subscribe();
+  }
+
 }
