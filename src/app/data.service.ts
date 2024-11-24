@@ -4,6 +4,7 @@ import { User } from './model/user';
 import { Observable, of } from 'rxjs';
 import { Booking } from './model/Booking';
 import { formatDate } from '@angular/common';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,8 @@ export class DataService {
     return of(this.users);
   }
 
-  getBookings() : Observable<Array<Booking>> {
-    return of(this.bookings);
+  getBookings(date: string) : Observable<Array<Booking>> {
+    return of(this.bookings.filter(b => b.date === date) ?? new Array<Booking>());
   }
 
   getBooking(id: number) : Observable<Booking> {
@@ -62,6 +63,9 @@ export class DataService {
   }
 
   constructor() {
+
+    console.log(environment.restUrl);
+
     this.bookings = new Array<Booking>;
     this.rooms = new Array<Room>;
     const room1 = new Room();
