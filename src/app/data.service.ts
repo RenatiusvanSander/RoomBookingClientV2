@@ -3,6 +3,7 @@ import { Room } from './model/room';
 import { User } from './model/user';
 import { Observable, of } from 'rxjs';
 import { Booking } from './model/Booking';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,7 @@ export class DataService {
   }
 
   constructor() {
+    console.log(environment.restUrl);
   }
 
   updateUser(user: User) : Observable<User> {
