@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Room } from './model/room';
 import { User } from './model/user';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Booking } from './model/Booking';
 import { environment } from '../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -16,7 +16,7 @@ export class DataService {
   }
 
   getUsers() : Observable<Array<User>> {
-    return of(new Array<User>());
+    return this.http.get<Array<User>>(environment.restUrl + '/api/users');
   }
 
   getBookings(date: string) : Observable<Array<Booking>> {
@@ -64,6 +64,9 @@ export class DataService {
   }
 
   getUser(id: number) : Observable<User> {
-    return this.http.get<User>(environment.restUrl + '/api/users/' + id);
+    return this.http.get<User>(environment.restUrl + '/api/users/' + id)
+    .pipe( map( data => {
+      return User.fromHttp(data);
+    }));
   }
 }

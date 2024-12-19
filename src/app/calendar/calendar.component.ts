@@ -3,6 +3,7 @@ import { formatDate } from '@angular/common';
 import { DataService } from '../data.service';
 import { Booking } from '../model/Booking';
 import { ActivatedRoute, Router } from '@angular/router';
+import { User } from '../model/user';
 
 @Component({
   selector: 'app-calendar',
@@ -20,10 +21,12 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataService.getUser(13).subscribe(
+    this.dataService.getUser(13)
+    .subscribe(
       (next) => {
         console.log(next);
         console.log(typeof next);
+        console.log(next.getRole());
       }
     );
 
