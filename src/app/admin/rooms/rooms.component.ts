@@ -9,11 +9,14 @@ import { FormResetService } from '../../form-reset.service';
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.css'
 })
-export class RoomsComponent implements OnInit{
+export class RoomsComponent implements OnInit {
 
   rooms: Array<Room>;
   selectedRoom: Room;
   action: string;
+  loadingData = true;
+  message: string = 'Please wait ... getting the list of rooms';
+  reloadAttempts = 0;
 
   constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router, private formResetService: FormResetService) {
     this.rooms = new Array<Room>();
@@ -21,19 +24,39 @@ export class RoomsComponent implements OnInit{
     this.action = '';
   }
 
-  ngOnInit(): void {
+  loadData() {
     this.dataService.getRooms().subscribe(
       (next) => {
         this.rooms = next ?? new Room();
-      });
+        this.loadingData = false;
+        this.processUrlParams();
+      },
+      (error) => {
+        if (error.status === 402) {
+          this.message = 'Payment required!';
+        } else {
+          this.reloadAttempts++;
 
+          if (this.reloadAttempts <= 10) {
+            this.message = 'Sorry - something went wrong, trying again.... please wait';
+            this.loadData();
+          } else {
+            this.message = 'Sorry - something went wrong, please contact support';
+          }
+
+        }
+      }
+    );
+  }
+
+  processUrlParams() {
     this.route.queryParams.subscribe(
       (params) => {
-        this.action =  '';
+        this.action = '';
         const id = params['id'];
 
         if (id) {
-          this.selectedRoom = this.rooms.find( (room: {id: number})  => room.id === +id) ?? new Room();
+          this.selectedRoom = this.rooms.find((room: { id: number }) => room.id === +id) ?? new Room();
           this.action = params['action'];
         }
 
@@ -45,11 +68,15 @@ export class RoomsComponent implements OnInit{
       });
   }
 
+  ngOnInit(): void {
+    this.loadData();
+  }
+
   setRoom(id: number) {
-    this.router.navigate(['admin','rooms'], { queryParams : { id, action : 'view'} });
+    this.router.navigate(['admin', 'rooms'], { queryParams: { id, action: 'view' } });
   }
 
   addRoom() {
-    this.router.navigate(['admin','rooms'], { queryParams : { action : 'add'} });
+    this.router.navigate(['admin', 'rooms'], { queryParams: { action: 'add' } });
   }
 }
