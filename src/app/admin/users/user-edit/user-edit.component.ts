@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { User } from '../../../model/user';
 import { DataService } from '../../../data.service';
 import { Router } from '@angular/router';
@@ -14,6 +14,9 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   @Input()
   user: User;
+
+  @Output()
+  dataChangdEvent = new EventEmitter();
 
   formUser: User;
 
@@ -59,17 +62,26 @@ export class UserEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.message = 'saving...';
     if (this.formUser.id == null) {
       this.dataService.addUser(this.formUser, this.password).subscribe(
         (user) => {
-          this.router.navigate(['admin','users'], {queryParams: {action: 'view', id : user.id}});
+          this.dataChangdEvent.emit();
+          this.router.navigate(['admin', 'users'], { queryParams: { action: 'view', id: user.id } });
+        },
+        error => {
+          this.message = 'Something went wrong and the data was not saved. You want to try again.';
         }
       );
     }
     else {
       this.dataService.updateUser(this.formUser).subscribe(
         (user) => {
-          this.router.navigate(['admin','users'], {queryParams: {action: 'view', id : user.id}});
+          this.dataChangdEvent.emit();
+          this.router.navigate(['admin', 'users'], { queryParams: { action: 'view', id: user.id } });
+        },
+        error => {
+          this.message = 'Something went wrong and the data was not saved. You want to try again.';
         }
       );
     }
@@ -89,9 +101,9 @@ export class UserEditComponent implements OnInit, OnDestroy {
       this.passwordsMatch = true;
     } else {
       this.passwordsMatch = this.password === this.password2;
-      
+
       if (this.password) {
-        this.passwordsAreValid =this.password.trim().length > 0;
+        this.passwordsAreValid = this.password.trim().length > 0;
       } else {
         this.passwordsAreValid = false;
       }
