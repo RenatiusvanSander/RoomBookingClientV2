@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Room } from './model/room';
+import { Layout, LayoutCapacity, Room } from './model/room';
 import { User } from './model/user';
 import { map, Observable, of } from 'rxjs';
 import { Booking } from './model/Booking';
@@ -81,6 +81,32 @@ export class DataService {
 
   resetUserPassword(id: number) : Observable<any> {
     return of(null);
+  }
+
+  private getCorrectedRoom(room : Room) {
+    const correctedRoom = {id: room.id, name: room.name, location: room.location, capacities : <any>[]};
+            
+    for(const lc of room.capacities) {
+      let correctLayout;
+      for(let member in Layout) {
+        if(lc.layout === LayoutCapacity.getLayoutByKey(member)) {
+          correctLayout = member;
+        }
+      }
+
+      let correctedLayout = {Layout: correctLayout, capacity: lc.capacity};
+      correctedRoom.capacities.push(correctedLayout);
+    }
+
+    return correctedRoom;
+  }
+
+  updateRoom(room: Room): Observable<Room> {
+    return this.http.put<Room>(environment.restUrl + '/api/rooms', this.getCorrectedRoom(room));
+  }
+
+  addRoom(newRoom: Room) : Observable<Room> {
+    return this.http.post<Room>(environment.restUrl + '/api/rooms', this.getCorrectedRoom(newRoom));
   }
 
 }
