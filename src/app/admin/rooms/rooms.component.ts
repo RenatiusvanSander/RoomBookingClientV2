@@ -43,7 +43,6 @@ export class RoomsComponent implements OnInit {
           } else {
             this.message = 'Sorry - something went wrong, please contact support';
           }
-
         }
       }
     );
