@@ -14,6 +14,7 @@ export class CalendarComponent implements OnInit {
 
   bookings: Array<Booking>;
   selectedDate : string;
+  dataLoaded = false;
 
   constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
     this.bookings = new Array<Booking>();
@@ -28,7 +29,10 @@ export class CalendarComponent implements OnInit {
           this.selectedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-GB');
         }
         this.dataService.getBookings(this.selectedDate).subscribe(
-          next => this.bookings = next
+          next => {
+            this.bookings = next;
+            this.dataLoaded = true;
+          }
         );
       }
     );

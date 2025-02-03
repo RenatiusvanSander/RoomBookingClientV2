@@ -1,4 +1,4 @@
-import { Layout, Room } from "./room";
+import { Layout, LayoutCapacity, Room } from "./room";
 import { User } from "./user";
 
 export class Booking {
@@ -14,5 +14,20 @@ export class Booking {
     
     getDateAsDate() {
       return new Date(this.date);
+    }
+
+    static fromHttp(booking: Booking) {
+      const newBooking = new Booking();
+      newBooking.id = booking.id;
+      newBooking.room = Room.fromHttp(booking.room);
+      newBooking.user = User.fromHttp(booking.user);
+      newBooking.layout = LayoutCapacity.getLayoutByKey(booking.layout);
+      newBooking.title = booking.title;
+      newBooking.date = booking.date;
+      newBooking.startTime = booking.startTime;
+      newBooking.endTime = booking.endTime;
+      newBooking.participants = booking.participants;
+
+      return newBooking;
     }
   }
