@@ -16,6 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RoomEditComponent } from './admin/rooms/room-edit/room-edit.component';
 import { EditBookingComponent } from './calendar/edit-booking/edit-booking.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { EditBookingLoadComponent } from './calendar/edit-booking-load/edit-booking-load.component';
 
 const routes : Routes = [
   {path : 'admin/users', component : UsersComponent},
@@ -39,7 +40,8 @@ const routes : Routes = [
     UserDetailComponent,
     UserEditComponent,
     RoomEditComponent,
-    EditBookingComponent
+    EditBookingComponent,
+    EditBookingLoadComponent
   ],
   imports: [
     BrowserModule,

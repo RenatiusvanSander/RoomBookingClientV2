@@ -53,7 +53,10 @@ export class DataService {
   }
 
   getBooking(id: number) : Observable<Booking> {
-    return of(new Booking());
+    return this.http.get<Booking>(environment.restUrl + '/api/bookings?id=' + id)
+    .pipe(
+      map( data => Booking.fromHttp(data))
+    );
   }
 
   saveBooking(booking: Booking) : Observable<Booking> {

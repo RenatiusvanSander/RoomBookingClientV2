@@ -18,6 +18,9 @@ export class EditBookingComponent implements OnInit{
   layoutEnum = Layout;
   users: Array<User>;
 
+  dataLoaded = false;
+  message = 'Please wait...';
+
   constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) {
     this.booking = new Booking();
     this.rooms = new Array<Room>();
@@ -36,10 +39,16 @@ export class EditBookingComponent implements OnInit{
     const id = this.route.snapshot.queryParams['id'];
     if(id) {
       this.dataService.getBooking(+id).subscribe(
-        next => this.booking = next
+        next => {
+          this.booking = next;
+          this.dataLoaded = true;
+          this.message = '';
+        }
       );
     } else {
       this.booking = new Booking();
+      this.dataLoaded = true;
+      this.message = '';
     }
   }
 
