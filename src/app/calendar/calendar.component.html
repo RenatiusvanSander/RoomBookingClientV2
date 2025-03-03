@@ -4,6 +4,7 @@
 
 <a class="btn btn-primary mt-3 mb-5" (click)="addBooking()">New Booking</a>
 
+<div *ngIf="message">{{message}}</div>
 <div *ngIf="dataLoaded">
   <h3 class="mt-5" *ngIf="bookings.length === 0">There are no meetings currently scheduled for this date.</h3>
 

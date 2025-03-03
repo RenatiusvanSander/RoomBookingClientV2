@@ -65,7 +65,7 @@ export class DataService {
   }
 
   deleteBooking(id: number) : Observable<any> {
-    return of(null);
+    return this.http.delete(environment.restUrl + "/api/bookings/" + id);
   }
 
   constructor(private http: HttpClient) {
