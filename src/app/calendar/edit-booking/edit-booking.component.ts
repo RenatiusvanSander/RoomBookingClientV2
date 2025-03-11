@@ -4,6 +4,8 @@ import { Layout, Room } from '../../model/room';
 import { DataService } from '../../data.service';
 import { User } from '../../model/user';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { EditBookingDataService } from '../../edit-booking-data.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-edit-booking',
@@ -21,24 +23,25 @@ export class EditBookingComponent implements OnInit{
   dataLoaded = false;
   message = 'Please wait...';
 
-  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) {
+  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router, private editBookingDataService : EditBookingDataService) {
     this.booking = new Booking();
     this.rooms = new Array<Room>();
     this.users = new Array<User>();
   }
 
   ngOnInit(): void {
-    this.dataService.getRooms().subscribe(
-      next => this.rooms = next
-    );
-
-    this.dataService.getUsers().subscribe(
-      next => this.users = next
-    );
+    this.rooms = this.editBookingDataService.rooms;
+    this.users = this.editBookingDataService.users;
 
     const id = this.route.snapshot.queryParams['id'];
     if(id) {
-      this.dataService.getBooking(+id).subscribe(
+      this.dataService.getBooking(+id)
+      .pipe(map (booking => {
+        booking.room = this.rooms.find(room => room.id === booking.room.id) ?? new Room();
+        booking.user = this.users.find(user => user.id === booking.user.id) ?? new User();
+        return booking;
+      }))
+      .subscribe(
         next => {
           this.booking = next;
           this.dataLoaded = true;
