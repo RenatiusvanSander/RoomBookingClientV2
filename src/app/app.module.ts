@@ -18,6 +18,7 @@ import { EditBookingComponent } from './calendar/edit-booking/edit-booking.compo
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { PrefetchRoomsService } from './prefetch-rooms.service';
 import { PrefetchUsersService } from './prefetch-users.service';
+import { LoginComponent } from './login/login.component';
 
 const routes : Routes = [
   {path : 'admin/users', component : UsersComponent},
@@ -41,7 +42,8 @@ const routes : Routes = [
     UserDetailComponent,
     UserEditComponent,
     RoomEditComponent,
-    EditBookingComponent
+    EditBookingComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
