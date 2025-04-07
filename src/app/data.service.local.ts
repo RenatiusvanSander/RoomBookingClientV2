@@ -178,4 +178,8 @@ export class DataService {
   resetUserPassword(id: number) : Observable<any> {
     return of(null);
   }
+
+  validateUser(name: string, passwortd: string) : Observable<string> {
+    return of("ok");
+  }
 }

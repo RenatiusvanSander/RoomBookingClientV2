@@ -4,7 +4,7 @@ import { User } from './model/user';
 import { map, Observable, of } from 'rxjs';
 import { Booking } from './model/Booking';
 import { environment } from '../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -122,6 +122,13 @@ export class DataService {
 
   resetUserPassword(id: number) : Observable<any> {
     return this.http.get(environment.restUrl + '/api/users/resetPassword/' + id);
+  }
+
+  validateUser(name: string, passwortd: string) : Observable<string> {
+    const authData = btoa(`${name}:${passwortd}`);
+    const headers = new HttpHeaders().append('Authorization','Basic' + authData);
+
+    return this.http.get<string>(environment.restUrl + '/api/basicAuth/validate', {headers: headers});
   }
 
   private getCorrectedRoom(room : Room) {
