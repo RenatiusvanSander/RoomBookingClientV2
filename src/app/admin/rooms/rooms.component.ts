@@ -3,6 +3,7 @@ import { DataService } from '../../data.service';
 import { Room } from '../../model/room';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormResetService } from '../../form-reset.service';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-rooms',
@@ -18,14 +19,14 @@ export class RoomsComponent implements OnInit {
   message: string = 'Please wait ... getting the list of rooms';
   reloadAttempts = 0;
 
-  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router, private formResetService: FormResetService) {
+  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router, private formResetService: FormResetService, private authService: AuthService) {
     this.rooms = new Array<Room>();
     this.selectedRoom = new Room();
     this.action = '';
   }
 
   loadData() {
-    this.dataService.getRooms().subscribe(
+    this.dataService.getRooms(this.authService.jwtToken).subscribe(
       (next) => {
         this.rooms = next ?? new Room();
         this.loadingData = false;

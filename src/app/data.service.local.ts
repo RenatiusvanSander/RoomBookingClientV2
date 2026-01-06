@@ -179,7 +179,7 @@ export class DataService {
     return of(null);
   }
 
-  validateUser(name: string, passwortd: string) : Observable<string> {
-    return of("ok");
+  validateUser(name: string, passwortd: string) : Observable<{result: string}> {
+    return of({result: 'ok'});
   }
 }

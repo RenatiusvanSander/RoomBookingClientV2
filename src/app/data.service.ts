@@ -11,8 +11,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class DataService {
 
-  getRooms() : Observable<Array<Room>> {
-    return this.http.get<Array<Room>>(environment.restUrl + '/api/rooms')
+  getRooms(token: string) : Observable<Array<Room>> {
+    const headers = new HttpHeaders().append('Authorization','Bearer ' + token);
+
+    return this.http.get<Array<Room>>(environment.restUrl + '/api/rooms', {headers})
     .pipe(
       map( data => {
         const rooms = new Array<Room>();
@@ -124,11 +126,11 @@ export class DataService {
     return this.http.get(environment.restUrl + '/api/users/resetPassword/' + id);
   }
 
-  validateUser(name: string, passwortd: string) : Observable<string> {
+  validateUser(name: string, passwortd: string) : Observable<{result: string}> {
     const authData = btoa(`${name}:${passwortd}`);
     const headers = new HttpHeaders().append('Authorization','Basic ' + authData);
 
-    return this.http.get<string>(environment.restUrl + '/api/basicAuth/validate', {headers: headers});
+    return this.http.get<{result: string}>(environment.restUrl + '/api/basicAuth/validate', {headers: headers});
   }
 
   private getCorrectedRoom(room : Room) {
