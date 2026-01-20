@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Room } from '../../../model/room';
 import { Router } from '@angular/router';
 import { DataService } from '../../../data.service';
+import { AuthService } from '../../../auth.service';
 
 @Component({
   selector: 'app-room-detail',
@@ -17,12 +18,17 @@ export class RoomDetailComponent implements OnInit {
   dataChangedEvent = new EventEmitter();
 
   message = '';
+
+  isAdminUSer: boolean = false;
   
-  constructor(private router: Router, private dataService: DataService) {
+  constructor(private router: Router, private dataService: DataService, private authService: AuthService) {
     this.room = new Room();
   }
 
   ngOnInit(): void {
+    if(this.authService.getRole() === 'ADMIN') {
+      this.isAdminUSer = true;
+    }
   }
 
   editRoom() {

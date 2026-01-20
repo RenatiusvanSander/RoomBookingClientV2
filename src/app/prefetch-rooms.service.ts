@@ -13,6 +13,6 @@ export class PrefetchRoomsService implements Resolve<Observable<Array<Room>>> {
   constructor(private dataService: DataService, private authService: AuthService) { }
 
   resolve() {
-    return this.dataService.getRooms(this.authService.jwtToken);
+    return this.dataService.getRooms();
   }
 }

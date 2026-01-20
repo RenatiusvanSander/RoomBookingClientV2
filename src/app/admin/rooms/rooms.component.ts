@@ -18,6 +18,7 @@ export class RoomsComponent implements OnInit {
   loadingData = true;
   message: string = 'Please wait ... getting the list of rooms';
   reloadAttempts = 0;
+  isAdminUser: boolean = false;
 
   constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router, private formResetService: FormResetService, private authService: AuthService) {
     this.rooms = new Array<Room>();
@@ -26,7 +27,7 @@ export class RoomsComponent implements OnInit {
   }
 
   loadData() {
-    this.dataService.getRooms(this.authService.jwtToken).subscribe(
+    this.dataService.getRooms().subscribe(
       (next) => {
         this.rooms = next ?? new Room();
         this.loadingData = false;
@@ -70,6 +71,10 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+
+    if(this.authService.getRole() === 'ADMIN') {
+      this.isAdminUser = true;
+    }
   }
 
   setRoom(id: number) {
