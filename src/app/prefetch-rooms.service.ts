@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Room } from './model/room';
 import { Observable } from 'rxjs';
-import { ActivatedRouteSnapshot, MaybeAsync, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Resolve } from '@angular/router';
 import { DataService } from './data.service';
 import { AuthService } from './auth.service';
 

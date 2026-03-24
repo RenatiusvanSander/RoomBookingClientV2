@@ -26,7 +26,7 @@ export class RoomDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.authService.getRole() === 'ADMIN') {
+    if(this.authService.role === 'ADMIN') {
       this.isAdminUSer = true;
     }
   }
