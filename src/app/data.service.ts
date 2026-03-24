@@ -132,7 +132,8 @@ export class DataService {
   }
 
   getRole() : Observable<{role: string}> {
-    return this.http.get<{role: string}>(environment.restUrl + '/api/users/currentUserRole', {withCredentials: true});
+    const headers = new HttpHeaders().append('X-Requested-With', 'XMLHttpRequest');
+    return this.http.get<{role: string}>(environment.restUrl + '/api/users/currentUserRole', {headers, withCredentials: true});
   }
 
   private getCorrectedRoom(room : Room) {
