@@ -19,7 +19,7 @@ export class RoomDetailComponent implements OnInit {
 
   message = '';
 
-  isAdminUSer: boolean = false;
+  isAdminUser: boolean = false;
   
   constructor(private router: Router, private dataService: DataService, private authService: AuthService) {
     this.room = new Room();
@@ -27,8 +27,18 @@ export class RoomDetailComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.authService.role === 'ADMIN') {
-      this.isAdminUSer = true;
+      this.isAdminUser = true;
     }
+
+    this.authService.roleSetEvent.subscribe(
+      next => {
+        if(next === 'ADMIN') {
+          this.isAdminUser = true;
+        } else {
+          this.isAdminUser = false;
+        }
+      }
+    );
   }
 
   editRoom() {

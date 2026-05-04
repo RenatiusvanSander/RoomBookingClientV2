@@ -15,5 +15,8 @@
           <li><a (click)="navigateToUsersAdmin()">Users</a></li>
       </ul>
     </div>
+    <div class="nav-item active" *ngIf="userIsLoggedIn">
+      <label class="nav-link" (click)="logout()">Logout</label>
+    </div>
   </div>
 </nav>

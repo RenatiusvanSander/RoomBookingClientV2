@@ -186,4 +186,8 @@ export class DataService {
   getRoles() : Observable<{role: string}> {
     return of({role: 'ADMIN'});
   }
+
+  logout() : Observable<string> {
+    return of('');
+  }
 }

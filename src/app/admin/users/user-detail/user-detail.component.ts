@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DataService } from '../../../data.service';
 import { User } from '../../../model/user';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../auth.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -18,12 +19,26 @@ export class UserDetailComponent implements OnInit {
 
   message = '';
 
-  constructor(private dataService: DataService, private router: Router) {
+  isAdminUser = false;
+
+  constructor(private dataService: DataService, private router: Router, private authService: AuthService) {
     this.user = new User();
   }
 
   ngOnInit(): void {
-    this.user;
+    if(this.authService.role === 'ADMIN') {
+      this.isAdminUser = true;
+    }
+
+    this.authService.roleSetEvent.subscribe(
+      next => {
+        if(next === 'ADMIN') {
+          this.isAdminUser = true;
+        } else {
+          this.isAdminUser = false;
+        }
+      }
+    );
   }
 
   editUser() {

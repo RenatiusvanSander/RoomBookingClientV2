@@ -4,6 +4,7 @@ import { DataService } from '../data.service';
 import { Booking } from '../model/Booking';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../model/user';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-calendar',
@@ -16,14 +17,28 @@ export class CalendarComponent implements OnInit {
   selectedDate : string;
   dataLoaded = false;
   message = '';
+  isAdminUser = false;
 
-  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
+  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, private authService: AuthService) {
     this.bookings = new Array<Booking>();
     this.selectedDate = '';
   }
 
   ngOnInit(): void {
     this.loadData();
+    if(this.authService.role === 'ADMIN') {
+      this.isAdminUser = true;
+    }
+
+    this.authService.roleSetEvent.subscribe(
+      next => {
+        if(next === 'ADMIN') {
+          this.isAdminUser = true;
+        } else {
+          this.isAdminUser = false;
+        }
+      }
+    );
   }
 
   loadData() {

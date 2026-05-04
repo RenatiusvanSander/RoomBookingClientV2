@@ -71,11 +71,20 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-
-    this.authService.setupRole();
+    console.log('role', this.authService.role);
     if(this.authService.role === 'ADMIN') {
       this.isAdminUser = true;
     }
+
+    this.authService.roleSetEvent.subscribe(
+      next => {
+        if(next === 'ADMIN') {
+          this.isAdminUser = true;
+        } else {
+          this.isAdminUser = false;
+        }
+      }
+    );
   }
 
   setRoom(id: number) {
